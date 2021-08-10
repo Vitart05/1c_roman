@@ -1,0 +1,1 @@
+url_set = 'https://b2b.xcom.ru/catalog/orgtekhnika/' #адрес страницы для парсинга
