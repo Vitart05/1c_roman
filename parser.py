@@ -43,18 +43,33 @@ def main():
     for k in range(1, count_page() + 1):
         file = open('pages/page{}.html'.format(str(k))).read()
         soup = BeautifulSoup(file, 'lxml')
-        prices = soup.find_all('div', class_='catalog-section-items-item')
+        prices = soup.find_all('div', class_='catalog-section-items')
         for price in prices:
-            product_code = price.find('div', class_='catalog-section-items-item__code').text.strip()
-            article = price.find('div', class_='catalog-section-items-item__article').text.strip()
-            name = price.find('span', class_='js-product-card').text.strip().strip('"')
-            name = name.replace(',', '.')
-            count1 = price.find('span', class_='catalog-section-items-item__available').text.strip()
-            count = get_price(count1)
-            if count == '':
-                count = '0'
-            pric = price.find('div', class_='catalog-section-items-item-price__value').text.strip()
-            price1 = get_price(pric)
+            try:
+                product_code = price.find('div', class_='catalog-section-items-item__code').text.strip()
+            except:
+                product_code = ''
+            try:
+                article = price.find('div', class_='catalog-section-items-item__article').text.strip()
+            except:
+                article = ''
+            name1 = price.find('a', class_='catalog-section-items-item__name').text.strip()
+            name1 = name1.replace(',', '.')
+            name2 = price.find('div', class_='catalog-section-items-item__description').text.strip()
+            name2 = name2.replace(',', '.')
+            name = name1 + ' ' + name2
+            try:
+                count1 = price.find('span', class_='catalog-section-items-item__available').text.strip()
+                count = get_price(count1)
+                if count == '':
+                    count = '0'
+            except:
+                count = ''
+            try:
+                pric = price.find('div', class_='catalog-section-items-item-price__value').text.strip()
+                price1 = get_price(pric)
+            except:
+                price1 = ''
             data = {'product_code': product_code, 'article': article, 'name': name, 'count': count, 'price1': price1}
             write_csv(data)
         print(k)
